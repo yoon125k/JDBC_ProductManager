@@ -16,9 +16,9 @@ public class ProductMenu {
 
 		System.out.println("1.전체 조회하기");
 		System.out.println("2.상품 추가하기");
-		System.out.println("3.상품 수정하기(상품id로 조회하고 수정");
-		System.out.println("4.상품 삭제하기(상품id로 조회해서 삭제");
-		System.out.println("5.상품 검색하기(상품 이름으로 키워드 검색");
+		System.out.println("3.상품 수정하기(상품id로 조회하고 수정)");
+		System.out.println("4.상품 삭제하기(상품id로 조회해서 삭제)");
+		System.out.println("5.상품 검색하기(상품 이름으로 키워드 검색)");
 		System.out.println("0. 프로그램 종료하기");
 
 		ProductController pc = new ProductController();
