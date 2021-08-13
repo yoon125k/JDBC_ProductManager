@@ -70,5 +70,21 @@ public class JDBCTemplate {
 
 	}
 	
-
+	public static void commit(Connection con) {
+		try {
+		con.commit();
+		}catch(SQLException e) {
+			System.out.println("[Error] commit 에러");
+			e.printStackTrace();
+		}
+	}
+	
+	public static void rollback(Connection con) {
+		try {
+			con.rollback();
+		}catch(SQLException e) {
+			System.out.println("[Error] rollback 에러");
+			e.printStackTrace();
+		}
+	}
 }

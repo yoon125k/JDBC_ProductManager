@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import com.common.JDBCTemplate;
+import static com.common.JDBCTemplate.*;
 import com.model.dto.Product;
 
-public class ProductDao extends JDBCTemplate {
+public class ProductDao{
 	List<Product> ProductList = new ArrayList<Product>();
 
 	public ProductDao() {
@@ -23,7 +23,7 @@ public class ProductDao extends JDBCTemplate {
 	}
 
 	public List<Product> selectAll(Connection con) {
-
+//		List<Product> ProductList = new ArrayList<Product>();
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -49,9 +49,8 @@ public class ProductDao extends JDBCTemplate {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
-			close(rs);
+			
 			close(stmt);
-			close(con);
 		}
 		return ProductList;
 	}
@@ -62,32 +61,44 @@ public class ProductDao extends JDBCTemplate {
 		PreparedStatement pstm = null;
 		String sql = "SELECT * FROM PRODUCT WHERE P_NAME = ?";
 		ResultSet rs = null;
+		
+		Product res = null;
 		try {
 			pstm = con.prepareStatement(sql);
 			pstm.setString(1, p_name);
 
 			rs = pstm.executeQuery();
 
-			while (rs.next()) {
-				System.out.println(rs.getString(1) + ":" + rs.getString(2) + ":" + rs.getInt(3) + ":" + rs.getString(4)
-						+ ":" + rs.getInt(5));
+			if(rs.next()) {
+				res = new Product();
+				res.setProduct_id(rs.getString(1));
+				res.setP_name(rs.getString(2));
+				res.setPrice(rs.getInt(3));
+				res.setDescription(rs.getString(4));
+				res.setStock(rs.getInt(5));
+				
 			}
+//			
+//			while (rs.next()) {
+//				System.out.println(rs.getString(1) + ":" + rs.getString(2) + ":" + rs.getInt(3) + ":" + rs.getString(4)
+//						+ ":" + rs.getInt(5));
+//			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			close(rs);
 			close(pstm);
-			close(con);
+			
 		}
-		return pd;
+		return res;
 
 	}
 
 	public int insert(Connection con, Product dto) {
 		PreparedStatement pstm = null;
 		String sql = "INSERT INTO PRODUCT VALUES(?,?,?,?,?)";
-		int result = 0;
+		int rs = 0;
 
 		try {
 			con = getConnection();
@@ -97,51 +108,41 @@ public class ProductDao extends JDBCTemplate {
 			pstm.setInt(3, dto.getPrice());
 			pstm.setString(4, dto.getDescription());
 			pstm.setInt(5, dto.getStock());
-			int rs = pstm.executeUpdate();
-			result = rs;
+			rs = pstm.executeUpdate();
+			
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			close(pstm);
-			close(con);
+			
 		}
-		return result;
+		return rs;
 	}
 
 	public int update(Connection con, Product dto) {
-		Scanner sc = new Scanner(System.in);
+		
 		PreparedStatement pstm = null;
 		String sql = "UPDATE PRODUCT SET P_NAME = ?,PRICE = ?,DESCRIPTION =?,STOCK =? WHERE PRODUCT_ID = ?";
 		int rs = 0;
 
-		System.out.print("수정할 상품 아이디 입력:");
-		String product_id = sc.next();
-		System.out.print("상품명: ");
-		String p_name = sc.next();
-		System.out.print("상품가격: ");
-		int price = sc.nextInt();
-		System.out.print("상품상세정보: ");
-		String description = sc.next();
-		System.out.print("재고: ");
-		int stock = sc.nextInt();
 
 		con = getConnection();
 
 		try {
 			pstm = con.prepareStatement(sql);
-			pstm.setString(1, p_name);
-			pstm.setInt(2, price);
-			pstm.setString(3, description);
-			pstm.setInt(4, stock);
-			pstm.setString(5, product_id);
+			pstm.setString(5, dto.getProduct_id());
+			pstm.setString(1, dto.getP_name());
+			pstm.setInt(2, dto.getPrice());
+			pstm.setString(3, dto.getDescription());
+			pstm.setInt(4, dto.getStock());
 			rs = pstm.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			close(pstm);
-			close(con);
+			
 		}
 
 		return rs;
@@ -161,11 +162,10 @@ public class ProductDao extends JDBCTemplate {
 			rs = pstm.executeUpdate();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			close(pstm);
-			close(con);
+			
 		}
 
 		return rs;

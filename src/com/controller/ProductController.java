@@ -1,18 +1,13 @@
 package com.controller;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
 import java.util.List;
 import java.util.Scanner;
 
-import com.common.JDBCTemplate;
-import com.model.dao.ProductDao;
 import com.model.dto.Product;
 import com.model.service.ProductBiz;
 
-public class ProductController extends JDBCTemplate {
+public class ProductController {
 
 	ProductBiz pb = new ProductBiz();
 	
@@ -49,8 +44,20 @@ public class ProductController extends JDBCTemplate {
 	}
 
 	public int update() {
-
-		Product pd = new Product();
+		Scanner sc = new Scanner(System.in);
+		
+		System.out.print("수정할 상품 id:");
+		String product_id = sc.next();
+		System.out.print("상품명: ");
+		String p_name = sc.next();
+		System.out.print("상품가격: ");
+		int price = sc.nextInt();
+		System.out.print("상품상세정보: ");
+		String description = sc.next();
+		System.out.print("재고: ");
+		int stock = sc.nextInt();
+		
+		Product pd = new Product(product_id,p_name,price,description,stock);
 		return pb.update(pd);
 
 	}

@@ -1,11 +1,11 @@
 package com.model.dto;
 
 public class Product {
-	String product_id;
-	String p_name;
-	int price;
-	String description;
-	int stock;
+	private String product_id;
+	private String p_name;
+	private int price;
+	private String description;
+	private int stock;
 	
 	public Product() {}
 	
